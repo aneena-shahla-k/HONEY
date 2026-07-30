@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 const TOTAL_FRAMES = 300;
 
-const WHATSAPP_NUMBER = "918129242208"; 
-const WHATSAPP_MESSAGE = "Hello, I would like to know more about your honey.";
+const WHATSAPP_NUMBER = "919000000000"; 
+const WHATSAPP_MESSAGE = "ഹലോ, Sidr Honey-യെ കുറിച്ച് അറിയാൻ ആഗ്രഹമുണ്ട്.";
 
 const CONTENT_DATA = {
   1: {
-    subtitle: "NATURALLY PURE. NOTHING ADDED.",
+    subtitle: "100% RAW & UNPROCESSED",
     title: <>Pure Forest Honey,<br /> From Wayanad</>,
     description: "100% Natural Sidr Honey. No sugar. No adulteration. Trusted by 10,000+ families across India."
   },
@@ -23,13 +23,12 @@ const CONTENT_DATA = {
 export default function Hero() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
+  const imagesRef = useRef([]);
+  const animFrameId = useRef(null);
   const navigate = useNavigate();
 
-  // Hover States
   const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
   const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
-
-  // Active Content Section Index (1 or 2)
   const [activeContentKey, setActiveContentKey] = useState(1);
 
   const { scrollYProgress } = useScroll({
@@ -39,7 +38,6 @@ export default function Hero() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [1, TOTAL_FRAMES]);
 
-  // Scroll Progress 0.5 (50%) എത്തുമ്പോൾ സ്മൂത്ത് ആയി Key അപ്ഡേറ്റ് ചെയ്യുന്നു
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest >= 0.5 && activeContentKey !== 2) {
       setActiveContentKey(2);
@@ -48,58 +46,83 @@ export default function Hero() {
     }
   });
 
-  useEffect(() => {
-    const images = [];
+  // Canvas Renderer
+  const renderFrame = (index) => {
+    if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
 
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-      const paddedIndex = String(i).padStart(3, "0");
-      const img = new Image();
-      img.src = `/frames/ezgif-frame-${paddedIndex}.webp`;
-      images.push(img);
-    }
+    animFrameId.current = requestAnimationFrame(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const context = canvas.getContext("2d");
+      const img = imagesRef.current[index - 1];
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-
-    const renderFrame = (index) => {
-      const img = images[index - 1];
       if (img && img.complete && img.naturalWidth !== 0) {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+
+        if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+        }
+
         const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
+        const isMobile = window.innerWidth <= 768;
 
-        const imgRatio = img.naturalWidth / img.naturalHeight;
-        const canvasRatio = canvasWidth / canvasHeight;
+        const scale = Math.max(
+          canvasWidth / img.naturalWidth,
+          canvasHeight / img.naturalHeight
+        );
 
-        let drawWidth, drawHeight, offsetX, offsetY;
+        const drawWidth = img.naturalWidth * scale;
+        const drawHeight = img.naturalHeight * scale;
 
-        if (canvasRatio > imgRatio) {
-          drawWidth = canvasWidth;
-          drawHeight = canvasWidth / imgRatio;
-          offsetX = 0;
+        let offsetX, offsetY;
+
+        if (isMobile) {
+          offsetX = -(drawWidth - canvasWidth) * 0.85; 
           offsetY = (canvasHeight - drawHeight) / 2;
         } else {
-          drawWidth = canvasHeight * imgRatio;
-          drawHeight = canvasHeight;
           offsetX = (canvasWidth - drawWidth) / 2;
-          offsetY = 0;
+          offsetY = (canvasHeight - drawHeight) / 2;
         }
 
         context.clearRect(0, 0, canvasWidth, canvasHeight);
         context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
-    };
+    });
+  };
 
-    if (images[0]) {
-      images[0].onload = () => renderFrame(1);
-      if (images[0].complete) renderFrame(1);
+  useEffect(() => {
+    const loadedImages = [];
+
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const paddedIndex = String(i).padStart(3, "0");
+      const img = new Image();
+      img.src = `/frames/ezgif-frame-${paddedIndex}.webp`;
+
+      if (i === 1) {
+        img.onload = () => renderFrame(1);
+      }
+      loadedImages.push(img);
     }
+    imagesRef.current = loadedImages;
 
     const unsubscribe = frameIndex.on("change", (latest) => {
       renderFrame(Math.round(latest));
     });
 
-    return () => unsubscribe();
+    const handleResize = () => {
+      renderFrame(Math.round(frameIndex.get()));
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("resize", handleResize);
+      if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
+    };
   }, [frameIndex]);
 
   const handleWhatsAppClick = () => {
@@ -114,8 +137,7 @@ export default function Hero() {
   const currentData = CONTENT_DATA[activeContentKey];
 
   return (
-    <div ref={containerRef} style={{ position: "relative", height: "400vh", width: "100%" }}>
-      {/* Sticky Screen Viewport */}
+    <div ref={containerRef} style={{ position: "relative", height: "300vh", width: "100%" }}>
       <div
         style={{
           position: "sticky",
@@ -124,25 +146,24 @@ export default function Hero() {
           width: "100%",
           overflow: "hidden",
           backgroundColor: "#e6ded5",
+          WebkitTransform: "translateZ(0)",
         }}
       >
-        {/* Fullscreen Canvas Background */}
+        {/* Canvas Background */}
         <canvas
           ref={canvasRef}
-          width={1920}
-          height={1080}
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            display: "block",
             zIndex: 1,
           }}
         />
 
-        {/* Text Content Overlay */}
+        {/* Dynamic Text Overlay Layer Matching Image standard */}
         <div
           style={{
             position: "absolute",
@@ -152,38 +173,38 @@ export default function Hero() {
             height: "100%",
             zIndex: 10,
             display: "flex",
-            alignItems: "center",
-            paddingLeft: "5%",
-            paddingRight: "5%",
+            alignItems: "flex-start",
+            paddingTop: "clamp(105px, 15vh, 135px)",
+            paddingLeft: "7%",
+            paddingRight: "7%",
             boxSizing: "border-box",
             pointerEvents: "none",
           }}
         >
           <div
             style={{
-              maxWidth: "600px",
-              color: "#3a2c20",
+              width: "100%",
+              maxWidth: "480px",
               pointerEvents: "auto",
             }}
           >
-            {/* Framer Motion AnimatePresence - Ultra Smooth Transitions */}
             <div style={{ minHeight: "220px", position: "relative" }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeContentKey}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
                 >
                   <p
                     style={{
-                      fontSize: "14px",
+                      fontSize: "clamp(11px, 3.2vw, 13px)",
                       fontWeight: "600",
-                      letterSpacing: "2px",
-                      color: "#7a5c43",
+                      letterSpacing: "0.14em",
+                      color: "#735c4a",
                       textTransform: "uppercase",
-                      marginBottom: "12px",
+                      marginBottom: "14px",
                     }}
                   >
                     {currentData.subtitle}
@@ -191,11 +212,13 @@ export default function Hero() {
 
                   <h1
                     style={{
-                      fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                      fontSize: "clamp(2.1rem, 7.5vw, 3.2rem)",
                       fontWeight: "700",
-                      lineHeight: "1.1",
+                      lineHeight: "1.12",
                       margin: "0 0 16px 0",
-                      fontFamily: "serif",
+                      fontFamily: "Georgia, 'Times New Roman', serif",
+                      color: "#302319",
+                      letterSpacing: "-0.01em",
                     }}
                   >
                     {currentData.title}
@@ -203,10 +226,12 @@ export default function Hero() {
 
                   <p
                     style={{
-                      fontSize: "18px",
-                      color: "#4a3b32",
-                      lineHeight: "1.5",
+                      fontSize: "clamp(14px, 4vw, 16.5px)",
+                      color: "#4e3f34",
+                      fontWeight: "400",
+                      lineHeight: "1.48",
                       marginBottom: "28px",
+                      maxWidth: "96%",
                     }}
                   >
                     {currentData.description}
@@ -215,25 +240,33 @@ export default function Hero() {
               </AnimatePresence>
             </div>
 
-            {/* Buttons (Fixed position, stays stable) */}
-            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "12px" }}>
+            {/* Vertical Stacked Buttons Matching Reference */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                maxWidth: "260px",
+                marginTop: "4px",
+              }}
+            >
               <button
                 onClick={handleWhatsAppClick}
                 onMouseEnter={() => setIsPrimaryHovered(true)}
                 onMouseLeave={() => setIsPrimaryHovered(false)}
                 style={{
-                  padding: "14px 28px",
-                  borderRadius: "50px",
-                  backgroundColor: isPrimaryHovered ? "#5d4430" : "#7a5c43",
+                  width: "100%",
+                  padding: "15px 24px",
+                  borderRadius: "32px",
+                  backgroundColor: isPrimaryHovered ? "#5d422f" : "#74533a",
                   color: "#ffffff",
-                  fontWeight: "600",
+                  fontSize: "15px",
+                  fontWeight: "500",
                   border: "none",
                   cursor: "pointer",
-                  boxShadow: isPrimaryHovered
-                    ? "0 6px 18px rgba(0,0,0,0.2)"
-                    : "0 4px 12px rgba(0,0,0,0.1)",
-                  transform: isPrimaryHovered ? "translateY(-2px)" : "translateY(0)",
-                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  transition: "all 0.25s ease",
                 }}
               >
                 Order via WhatsApp
@@ -244,21 +277,20 @@ export default function Hero() {
                 onMouseEnter={() => setIsSecondaryHovered(true)}
                 onMouseLeave={() => setIsSecondaryHovered(false)}
                 style={{
-                  padding: "14px 28px",
-                  borderRadius: "50px",
-                  border: "1px solid rgba(122, 92, 67, 0.4)",
+                  width: "100%",
+                  padding: "15px 24px",
+                  borderRadius: "32px",
+                  fontSize: "15px",
+                  border: "1px solid rgba(116, 83, 58, 0.25)",
                   backgroundColor: isSecondaryHovered
-                    ? "rgba(255, 255, 255, 0.95)"
-                    : "rgba(255, 255, 255, 0.7)",
-                  color: "#7a5c43",
-                  fontWeight: "600",
-                  backdropFilter: "blur(8px)",
+                    ? "rgba(247, 244, 239, 0.95)"
+                    : "rgba(247, 244, 239, 0.75)",
+                  color: "#5e432f",
+                  fontWeight: "500",
+                  backdropFilter: "blur(12px)",
                   cursor: "pointer",
-                  transform: isSecondaryHovered ? "translateY(-2px)" : "translateY(0)",
-                  boxShadow: isSecondaryHovered
-                    ? "0 6px 18px rgba(0,0,0,0.08)"
-                    : "none",
-                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                  transition: "all 0.25s ease",
                 }}
               >
                 Explore Products →
