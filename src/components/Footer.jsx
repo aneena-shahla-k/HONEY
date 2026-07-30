@@ -113,7 +113,6 @@ export default function Footer() {
         </div>
       </footer>
 
-      {/* Back to Top Floating Button */}
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
