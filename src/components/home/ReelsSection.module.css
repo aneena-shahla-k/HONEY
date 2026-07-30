@@ -1,0 +1,205 @@
+.reelsSection {
+  background-color: #fdfbf7;
+  padding: 5rem 1.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  background: #fbf3e4;
+  border: 1px solid #f3e2c6;
+  color: #986f22;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.header h2 {
+  font-size: 2.3rem;
+  color: #2c2219;
+  font-weight: 700;
+}
+
+.header p {
+  color: #7d7267;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+/* Carousel Layout */
+.carouselContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardsWrapper {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.reelCard {
+  position: absolute;
+  width: 260px;
+  height: 440px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(44, 34, 25, 0.12);
+  cursor: pointer;
+  background: #2c2219;
+  border: 2px solid #f1e9dc;
+}
+
+.activeCard {
+  border-color: #caa04c;
+  box-shadow: 0 20px 40px rgba(202, 160, 76, 0.25);
+}
+
+.videoBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Controls */
+.topBar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.iconBtn {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border: none;
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.bottomDetails {
+  position: absolute;
+  bottom: 20px;
+  left: 15px;
+  right: 15px;
+  color: #ffffff;
+  z-index: 10;
+}
+
+.likes {
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.bottomDetails h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Navigation Dots & Arrows */
+.navBtns {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.arrowBtn {
+  background: #ffffff;
+  border: 1px solid #e5cd9c;
+  color: #2c2219;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.arrowBtn:hover {
+  background: #caa04c;
+  color: #ffffff;
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5cd9c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activeDot {
+  width: 24px;
+  border-radius: 10px;
+  background: #caa04c;
+}
+
+@media (max-width: 640px) {
+  .cardsWrapper {
+    height: 420px;
+  }
+  .reelCard {
+    width: 220px;
+    height: 380px;
+  }
+}

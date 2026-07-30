@@ -1,0 +1,161 @@
+
+
+.product-card {
+  margin-top: 50px;
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  height: 250px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.price {
+  font-weight: 600;
+  color: #2d241d;
+  margin-bottom: 0;
+}
+
+/* Plus Button */
+.add-cart-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #5d4a3e;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .add-cart-btn {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.add-cart-btn:hover {
+  background: #bd7344;
+}
+
+/* Back Button */
+.btn-green {
+  background-color: #5d4a3e;
+  color: #fff;
+  border-radius: 30px;
+  padding: 12px 28px;
+  cursor: pointer;
+  width: 300px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn-green:hover {
+  background-color: #c4723f;
+  color: #fff;
+}
+/* Mobile View Adjustment (2 Columns) */
+@media (max-width: 768px) {
+  .product-card {
+    margin-top: 15px;
+    padding: 10px;
+  }
+
+  .product-card img {
+    height: 120px; 
+  }
+
+  .product-card h6 {
+    font-size: 0.85rem;
+    margin-top: 5px;
+  }
+
+  .add-cart-btn {
+    opacity: 1;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+
+.filter-tabs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  
+  padding-top: 160px; 
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+.filter-tab {
+  padding: 8px 18px;
+  margin-top: 0;
+  border-radius: 30px;
+  border: 1px solid #e0d5c8;
+  background-color: #fff;
+  color: #5d4a3e;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+@media (max-width: 768px) {
+  .filter-tabs-container {
+    gap: 8px; 
+  }
+
+  .filter-tab {
+    padding: 0px 14px;
+    font-size: 12px; 
+  }
+}
+
+
+
+.filter-tab:hover {
+  border-color: #b89674;
+  color: #b89674;
+}
+
+/* Active State */
+.filter-tab.active {
+  background-color: #b89674;
+  color: #fff;
+  border-color: #b89674;
+  box-shadow: 0 4px 12px rgba(184, 150, 116, 0.25);
+}
+
