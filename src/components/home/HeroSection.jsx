@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const TOTAL_FRAMES = 300;
 
-const WHATSAPP_NUMBER = "919000000000"; 
-const WHATSAPP_MESSAGE = "ഹലോ, Sidr Honey-യെ കുറിച്ച് അറിയാൻ ആഗ്രഹമുണ്ട്.";
+const WHATSAPP_NUMBER = "918129242208"; 
+const WHATSAPP_MESSAGE = "Hello , i would like to know more about your honey";
 
 const CONTENT_DATA = {
   1: {
