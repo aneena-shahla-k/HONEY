@@ -184,9 +184,8 @@ export default function Hero() {
             height: "100%",
             zIndex: 10,
             display: "flex",
-            // Desktop-ൽ vertical center, Mobile-ൽ top layout
             alignItems: isMobile ? "flex-start" : "center",
-            paddingTop: isMobile ? "125px" : "0",
+            paddingTop: isMobile ? "105px" : "0",
             paddingLeft: isMobile ? "6%" : "8%",
             paddingRight: isMobile ? "6%" : "8%",
             boxSizing: "border-box",
@@ -211,12 +210,12 @@ export default function Hero() {
                 >
                   <p
                     style={{
-                      fontSize: "clamp(10px, 2.5vw, 12px)",
+                      fontSize: isMobile ? "10px" : "clamp(10px, 2.5vw, 12px)",
                       fontWeight: "600",
                       letterSpacing: "2px",
                       color: "#6b4f38",
                       textTransform: "uppercase",
-                      marginBottom: "8px",
+                      marginBottom: isMobile ? "4px" : "8px",
                       marginTop: "0px",
                     }}
                   >
@@ -225,7 +224,7 @@ export default function Hero() {
 
                   <h1
                     style={{
-                      fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+                      fontSize: isMobile ? "1.6rem" : "clamp(1.8rem, 5vw, 3.5rem)",
                       fontWeight: "800",
                       lineHeight: "1.15",
                       margin: "0 0 10px 0",
@@ -236,18 +235,21 @@ export default function Hero() {
                     {currentData.title}
                   </h1>
 
-                  <p
-                    style={{
-                      fontSize: "clamp(13px, 3.2vw, 15px)",
-                      color: "#4a3b32",
-                      lineHeight: "1.4",
-                      marginBottom: "18px",
-                      maxWidth: isMobile ? "100%" : "92%",
-                      textShadow: "0 1px 5px rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    {currentData.description}
-                  </p>
+                  {/* Desktop view-ൽ മാത്രം പാരഗ്രാഫ് കാണിക്കും */}
+                  {!isMobile && (
+                    <p
+                      style={{
+                        fontSize: "clamp(13px, 3.2vw, 15px)",
+                        color: "#4a3b32",
+                        lineHeight: "1.4",
+                        marginBottom: "18px",
+                        maxWidth: "92%",
+                        textShadow: "0 1px 5px rgba(255,255,255,0.5)",
+                      }}
+                    >
+                      {currentData.description}
+                    </p>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -255,54 +257,55 @@ export default function Hero() {
             <div
               style={{
                 display: "flex",
-                gap: "10px",
+                gap: isMobile ? "8px" : "10px",
                 flexWrap: "wrap",
-                marginTop: "8px",
+                marginTop: isMobile ? "4px" : "8px",
               }}
             >
               <button
-                onClick={handleWhatsAppClick}
-                onMouseEnter={() => setIsPrimaryHovered(true)}
-                onMouseLeave={() => setIsPrimaryHovered(false)}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "50px",
-                  backgroundColor: isPrimaryHovered ? "#5d4430" : "#7a5c43",
-                  color: "#ffffff",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  border: "none",
-                  cursor: "pointer",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  transform: isPrimaryHovered ? "translateY(-2px)" : "translateY(0)",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                Order via WhatsApp
-              </button>
+  onClick={handleWhatsAppClick}
+  onMouseEnter={() => setIsPrimaryHovered(true)}
+  onMouseLeave={() => setIsPrimaryHovered(false)}
+  style={{
+    padding: isMobile ? "6px 12px" : "10px 20px",
+    borderRadius: "50px",
+    backgroundColor: isPrimaryHovered ? "#5d4430" : "#7a5c43",
+    color: "#ffffff",
+    fontSize: isMobile ? "10.5px" : "13px",
+    fontWeight: "600",
+    border: "none",
+    cursor: "pointer",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+    transform: isPrimaryHovered ? "translateY(-2px)" : "translateY(0)",
+    transition: "all 0.3s ease",
+  }}
+>
+  Order via WhatsApp
+</button>
 
-              <button
-                onClick={handleExploreClick}
-                onMouseEnter={() => setIsSecondaryHovered(true)}
-                onMouseLeave={() => setIsSecondaryHovered(false)}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "50px",
-                  fontSize: "13px",
-                  border: "1px solid rgba(122, 92, 67, 0.4)",
-                  backgroundColor: isSecondaryHovered
-                    ? "rgba(255, 255, 255, 0.95)"
-                    : "rgba(255, 255, 255, 0.8)",
-                  color: "#7a5c43",
-                  fontWeight: "600",
-                  backdropFilter: "blur(8px)",
-                  cursor: "pointer",
-                  transform: isSecondaryHovered ? "translateY(-2px)" : "translateY(0)",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                Explore Products →
-              </button>
+<button
+  onClick={handleExploreClick}
+  onMouseEnter={() => setIsSecondaryHovered(true)}
+  onMouseLeave={() => setIsSecondaryHovered(false)}
+  style={{
+    padding: isMobile ? "6px 12px" : "10px 20px",
+    borderRadius: "50px",
+    fontSize: isMobile ? "10.5px" : "13px",
+    border: "1px solid rgba(122, 92, 67, 0.4)",
+    backgroundColor: isSecondaryHovered
+      ? "rgba(255, 255, 255, 0.95)"
+      : "rgba(255, 255, 255, 0.8)",
+    color: "#7a5c43",
+    fontWeight: "600",
+    backdropFilter: "blur(8px)",
+    cursor: "pointer",
+    transform: isSecondaryHovered ? "translateY(-2px)" : "translateY(0)",
+    transition: "all 0.3s ease",
+  }}
+>
+  Explore Products →
+</button>
+
             </div>
           </div>
         </div>
