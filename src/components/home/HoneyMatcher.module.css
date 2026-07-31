@@ -109,18 +109,13 @@
   align-items: center;
 }
 
-@media (max-width: 640px) {
-  .resultGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .imgBox {
   position: relative;
   border-radius: 14px;
   overflow: hidden;
   background: #f4f0ea;
   aspect-ratio: 1 / 1;
+  width: 100%;
 }
 
 .imgBox img {
@@ -139,6 +134,7 @@
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
+  z-index: 2;
 }
 
 .resultDetails h3 {
@@ -199,4 +195,85 @@
 
 .resetBtn:hover {
   background: #f1f5f9;
+}
+
+/* ==================================== */
+/* MOBILE RESPONSIVE STYLES (≤ 640px) */
+/* ==================================== */
+@media (max-width: 640px) {
+  .matcherSection {
+    padding: 40px 12px;
+    margin: 30px auto;
+    border-radius: 16px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .header p {
+    font-size: 0.85rem;
+  }
+
+  .cardWrapper {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .questionCard h3 {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+  }
+
+  .optionBtn {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+  }
+
+  /* Result Screen Mobile Styles */
+  .resultGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .imgBox {
+    max-width: 170px; /* ഇമേജ് ബോക്സ് വലുതാകുന്നത് തടയാൻ */
+    margin: 0 auto 10px auto;
+    border-radius: 12px;
+  }
+
+  .resultDetails {
+    text-align: center;
+  }
+
+  .resultDetails h3 {
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .desc {
+    font-size: 0.82rem;
+    margin-bottom: 10px;
+  }
+
+  .price {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .actionBtns {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .addToCartBtn,
+  .resetBtn {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    justify-content: center;
+  }
 }
